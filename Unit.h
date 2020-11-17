@@ -7,8 +7,8 @@ class Unit {
         int shooting_interval; // milisecond
     
     public:
-        // constructers
-        Unit();
+        // constructer
+        Unit(float hp, float attack, int velocity[2], int pos[2], int shooting_interval);
 
         // accessor
         float get_hp() const;
@@ -17,6 +17,7 @@ class Unit {
         int* get_pos() const;
         int get_shooting_interval() const;
 
+        // mutator
         void move();
 
         // pure virual funciton
