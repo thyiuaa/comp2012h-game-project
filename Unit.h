@@ -1,11 +1,12 @@
 class Unit {
-    private:
+    protected:
         float hp;
         float attack;
         int velocity[2];
         int pos[2];
         int shooting_interval; // milisecond
-    
+        const int MAX_HP
+
     public:
         // constructer
         Unit(float hp, float attack, int velocity[2], int pos[2], int shooting_interval);
@@ -22,5 +23,5 @@ class Unit {
 
         // pure virual funciton
         virtual void shoot() = 0; // player shoot when button pressed, enermy may shoot randomly 
-        virtual void take_damage() = 0; // player can reduce damage by defensing
+        virtual void take_damage(float raw_damage) = 0; // player can reduce damage by defensing
 };
