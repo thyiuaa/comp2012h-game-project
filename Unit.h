@@ -9,7 +9,7 @@ class Unit {
 
     public:
         // constructer
-        Unit(float hp, float attack, int velocity[2], int pos[2], int shooting_interval);
+        Unit(float hp, float attack, int velocity[2], int pos[2], int shooting_interval, int MAX_HP);
 
         // accessor
         float get_hp() const;
@@ -19,7 +19,10 @@ class Unit {
         int get_shooting_interval() const;
 
         // mutator
-        void move();
+        void move_up();
+        void move_down();
+        void move_right();
+        void move_left();
 
         // pure virual funciton
         virtual void shoot() = 0; // player shoot when button pressed, enermy may shoot randomly 

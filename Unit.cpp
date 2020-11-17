@@ -1,6 +1,6 @@
 #include "Unit.h"
 
-Unit::Unit(float hp, float attack, int velocity[2], int pos[2], int shooting_interval): hp(hp), attack(attack), shooting_interval(shooting_interval) {
+Unit::Unit(float hp, float attack, int velocity[2], int pos[2], int shooting_interval, int MAX_HP): hp(hp), attack(attack), shooting_interval(shooting_interval), MAX_HP(MAX_HP) {
     this->velocity[0] = velocity[0];
     this->velocity[1] = velocity[1];
     this->pos[0] = pos[0];
@@ -28,7 +28,19 @@ int Unit::get_shooting_interval() const {
     return shooting_interval;
 }
 
-void Unit::move() { // validation should be done by game engine
-    pos[0] += velocity[0];
+// in bound validation should be done by game engine
+void Unit::move_up() {
     pos[1] += velocity[1];
+}
+
+void Unit::move_down() {
+    pos[1] -= velocity[1];
+}
+
+void Unit::move_right() {
+    pos[0] += velocity[0];
+}
+
+void Unit::move_left() {
+    pos[0] -= velocity[0];
 }
