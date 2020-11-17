@@ -11,7 +11,7 @@ class Unit {
         Unit();
 
         // accessor
-        float get_position_row() const;
+        float get_hp() const;
         float get_attack() const;
         int* get_velocity() const;
         int* get_pos() const;
