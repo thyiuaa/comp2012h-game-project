@@ -5,7 +5,7 @@ class Player : public Unit {
     public:
         enum State {ATTACK, DEFENSE};
         // constructor
-        Player(float hp, float attack, int velocity[2], int pos[2], int shooting_interval, float defense);
+        Player(float hp, float attack, int velocity[2], int pos[2], int shooting_interval, int MAX_HP, float defense);
 
         // accessor
         float get_defense() const;

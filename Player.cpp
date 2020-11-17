@@ -1,7 +1,7 @@
 #include "Player.h"
 
-Player::Player(float hp, float attack, int velocity[2], int pos[2], int shooting_interval, float defense):
-    defense(defense), Unit(hp, attack, velocity, pos, shooting_interval) {}
+Player::Player(float hp, float attack, int velocity[2], int pos[2], int shooting_interval, int MAX_HP, float defense):
+    defense(defense), Unit(hp, attack, velocity, pos, shooting_interval, MAX_HP) {}
 
 float Player::get_defense() const {
     return defense;
