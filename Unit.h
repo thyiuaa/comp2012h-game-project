@@ -5,7 +5,7 @@ class Unit {
         int velocity[2];
         int pos[2];
         int shooting_interval; // milisecond
-        const int MAX_HP
+        const int MAX_HP;
 
     public:
         // constructer
