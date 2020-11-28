@@ -22,8 +22,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_toggled(bool checked);
-
     void on_startButton_clicked();
 
     void on_leaveButton_clicked();
