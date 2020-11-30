@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
 #include <QTimer>
 
 #include "GameField.h"
@@ -30,14 +29,13 @@ private:
     friend class GameField;
     Ui::MainWindow *ui;
 
-    QGraphicsScene scene;
     GameEngine game_engine;
     GameField game_field;
     QTimer* screen_refersher;
     const int screen_refresh_interval{10}; // millisecond
     void refresh_screen();
 
-    bool up_pressed{false}, down_pressed{false}, left_pressed{false}, right_pressed{false};
+    bool up_pressed{false}, down_pressed{false}, left_pressed{false}, right_pressed{false}, space_pressed{false};
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 };

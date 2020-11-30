@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "Unit.h"
+#include "Bullet.h"
 
 class Enemy: public Unit {
     protected:
@@ -16,7 +17,7 @@ class Enemy: public Unit {
         int get_enemy_score();
 
         //idk what these are called
-        virtual void shoot();
+        virtual Bullet* shoot();
         virtual void take_damage(float raw_damage);
 };
 

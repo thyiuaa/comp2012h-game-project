@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->graphicsView->setScene(&scene);
+    ui->graphicsView->setScene(&game_field);
     ui->graphicsView->show();
 
     screen_refersher = new QTimer(this);
@@ -27,7 +27,7 @@ void MainWindow::on_startButton_clicked() {
     ui->leaveButton->setVisible(false);
 
     // create player and enemys
-    game_engine.spawn_player(game_field, scene);
+    game_engine.spawn_player(game_field);
 
     // start the screen refresher
     screen_refersher->start(10);
@@ -38,8 +38,11 @@ void MainWindow::on_leaveButton_clicked() {
 }
 
 void MainWindow::refresh_screen() {
-    game_engine.send_player_move_to_unit(up_pressed, down_pressed, left_pressed, right_pressed);
-    game_engine.refresh_all_units_update(game_field);
+    game_engine.refresh_all_units_cooldown();
+    game_engine.refresh_all_pos(up_pressed, down_pressed, left_pressed, right_pressed);
+    game_engine.collision_detection();
+    game_engine.refresh_all_view(game_field);
+    if (space_pressed) game_engine.player_shoot(game_field);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -63,14 +66,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
                 right_pressed = true;
                 break;
 
+            case Qt::Key_Space:
+                space_pressed = true;
+                break;
+
             default:
                 break;
         }
     }
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent *event)
-{
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if (event->isAutoRepeat()) return;
 
     switch (event->key()) {
@@ -88,6 +94,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
         case Qt::Key_Right:
             right_pressed = false;
+            break;
+
+        case Qt::Key_Space:
+            space_pressed = false;
             break;
 
         default:

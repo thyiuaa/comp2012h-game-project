@@ -14,7 +14,7 @@ Player::State Player::get_state() const {
     return state;
 }
 
-void Player::user_controlled_movement(bool up, bool down, bool left, bool right) {
+void Player::update_pos(bool up, bool down, bool left, bool right) {
     if (up != down) {
         if (up) move_up(); else move_down();
     }
@@ -24,15 +24,19 @@ void Player::user_controlled_movement(bool up, bool down, bool left, bool right)
     }
 }
 
-void Player::shoot() {
-    int bullet_pos[2] = {pos_x, pos_y+height/2+bullet_size[1]/2};
-    Bullet* new_shoot = new Bullet(bullet_size[0], bullet_size[1], bullet_pos[0], bullet_pos[1], bullet_velocity);
-    if (fired_shoot == nullptr) {
-        fired_shoot = new_shoot;
-    } else {
-        Bullet* last_shoot = fired_shoot;
-//        while (last_shoot)
+Bullet* Player::shoot() {
+    int bullet_width = QPixmap("://images/friendly_fire.png").width();
+    int bullet_height = QPixmap("://images/friendly_fire.png").height();
+    int bullet_pos_x = pos_x+width/2-bullet_width/2;
+    int bullet_pos_y = pos_y-0.75*bullet_height;
+    int bullet_velocity = 1;
+
+    if (shooting_cooldown == 0) {
+        Bullet* bullet = new Bullet(bullet_width, bullet_height, bullet_pos_x, bullet_pos_y, bullet_velocity);
+        shooting_cooldown = shooting_interval;
+        return bullet;
     }
+    return nullptr;
 }
 
 void Player::take_damage(float raw_damage) {

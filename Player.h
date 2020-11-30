@@ -15,15 +15,14 @@ class Player : public Unit {
         float get_defense() const;
         State get_state() const;
 
-        void user_controlled_movement(bool up, bool down, bool left, bool right);
+        void update_pos(bool up, bool down, bool left, bool right);
 
-        virtual void shoot();
-        virtual void take_damage(float raw_damage);
+        virtual Bullet* shoot() override;
+        virtual void take_damage(float raw_damage) override;
 
     private:
         float defense;
         State state {State::ATTACK};
-        Bullet* fired_shoot {nullptr};
         virtual ~Player() {};
 };
 

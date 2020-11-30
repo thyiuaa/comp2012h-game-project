@@ -50,21 +50,31 @@ QGraphicsPixmapItem* Unit::get_view() const {
 // in bound validation should be done by game engine
 // top left corner is (0,0)
 void Unit::move_up() {
+    if (pos_y-velocity_y < 0) return;
     pos_y -= velocity_y;
 }
 
 void Unit::move_down() {
+    if (pos_y+velocity_y > 840-height) return;
     pos_y += velocity_y;
 }
 
 void Unit::move_right() {
+    if (pos_x+velocity_x > 670-width) return;
     pos_x += velocity_x;
 }
 
 void Unit::move_left() {
-    pos_x -= velocity_y;
+    if (pos_x-velocity_x < 0) return;
+    pos_x -= velocity_x;
 }
 
 void Unit::register_view(QGraphicsPixmapItem* _view) {
     view = _view;
+}
+
+void Unit::update_cooldown() {
+    if (shooting_cooldown != 0) {
+        shooting_cooldown -= 1;
+    }
 }

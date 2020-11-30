@@ -14,7 +14,7 @@ int Enemy::get_enemy_score(){
 }
 
 //idk what these are called
-void Enemy::shoot(){}
+Bullet* Enemy::shoot(){}
 
 void Enemy::take_damage(float raw_damage){
     if (raw_damage > hp) hp = 0;
