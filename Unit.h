@@ -7,9 +7,8 @@
 
 class Unit {
     protected:
-        float hp;
+        int hp;
         const int MAX_HP;
-        float attack;
         int width, height; // pixel
 
         int velocity_x, velocity_y; // pixel per frame
@@ -23,11 +22,11 @@ class Unit {
 
     public:
         // constructer
-        Unit(float hp, float attack, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height);
+        Unit(int hp, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height);
 
         // accessor
-        float get_hp() const;
-        float get_attack() const;
+        int get_hp() const;
+        int get_MAX_HP() const;
         int get_velocity_x() const;
         int get_velocity_y() const;
         int get_pos_x() const;
@@ -46,9 +45,8 @@ class Unit {
         void register_view(QGraphicsPixmapItem* _view);
         void update_cooldown();
 
-        // pure virual funciton
         virtual Bullet* shoot() = 0; // player shoot when button pressed, enermy may shoot randomly
-        virtual void take_damage(float raw_damage) = 0; // player can reduce damage by defensing
+        bool take_damage();
 
         virtual ~Unit() {};
 };

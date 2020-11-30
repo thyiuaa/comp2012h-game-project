@@ -1,14 +1,14 @@
 #include "Unit.h"
 
-Unit::Unit(float hp, float attack, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height)
-        : hp(hp), attack(attack), velocity_x(velocity_x), velocity_y(velocity_y), pos_x(pos_x), pos_y(pos_y), shooting_interval(shooting_interval), MAX_HP(MAX_HP), width(width), height(height) {}
+Unit::Unit(int hp, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height)
+        : hp(hp), velocity_x(velocity_x), velocity_y(velocity_y), pos_x(pos_x), pos_y(pos_y), shooting_interval(shooting_interval), MAX_HP(MAX_HP), width(width), height(height) {}
 
-float Unit::get_hp() const {
+int Unit::get_hp() const {
     return hp;
 }
 
-float Unit::get_attack() const {
-    return attack;
+int Unit::get_MAX_HP() const {
+    return MAX_HP;
 }
 
 int Unit::get_velocity_x() const {
@@ -77,4 +77,12 @@ void Unit::update_cooldown() {
     if (shooting_cooldown != 0) {
         shooting_cooldown -= 1;
     }
+}
+
+bool Unit::take_damage() {
+    if (hp <= 0) return false;
+
+    hp -= 1;
+    if (hp == 0) return true;
+    else return false;
 }

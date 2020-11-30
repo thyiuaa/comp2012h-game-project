@@ -1,7 +1,7 @@
 #include "Player.h"
 
-Player::Player(float hp, float attack, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height, float defense)
-            :Unit(hp, attack, velocity_x, velocity_y, pos_x, pos_y, shooting_interval, MAX_HP, width, height), defense(defense)
+Player::Player(int hp, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height, float defense)
+            :Unit(hp, velocity_x, velocity_y, pos_x, pos_y, shooting_interval, MAX_HP, width, height), defense(defense)
 {
     icon_path = "://images/player_icon_test.png";
 }
@@ -14,14 +14,17 @@ Player::State Player::get_state() const {
     return state;
 }
 
-void Player::update_pos(bool up, bool down, bool left, bool right) {
+bool Player::update_pos(bool up, bool down, bool left, bool right) {
+    bool moved = false;
     if (up != down) {
         if (up) move_up(); else move_down();
+        moved = true;
     }
-
     if (left != right) {
         if (left) move_left(); else move_right();
+        moved = true;
     }
+    return moved;
 }
 
 Bullet* Player::shoot() {
@@ -39,15 +42,15 @@ Bullet* Player::shoot() {
     return nullptr;
 }
 
-void Player::take_damage(float raw_damage) {
-    float expected_hp = 0;
-    if (state == State::ATTACK) {
-        expected_hp = hp-raw_damage;
-    } else {
-        expected_hp = hp-(raw_damage-(defense*hp/MAX_HP));
-    }
+//void Player::take_damage(float raw_damage) {
+//    float expected_hp = 0;
+//    if (state == State::ATTACK) {
+//        expected_hp = hp-raw_damage;
+//    } else {
+//        expected_hp = hp-(raw_damage-(defense*hp/MAX_HP));
+//    }
 
-    if (expected_hp < 0) {
-        hp = 0;
-    }
-}
+//    if (expected_hp < 0) {
+//        hp = 0;
+//    }
+//}
