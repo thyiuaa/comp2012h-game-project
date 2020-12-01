@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/enemy_fire.png</file>
+        <file>images/friendly_fire.png</file>
+        <file>images/player_icon_test.png</file>
+        <file>images/heart0.png</file>
+        <file>images/heart1.png</file>
+    </qresource>
+</RCC>
