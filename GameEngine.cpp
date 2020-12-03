@@ -125,6 +125,7 @@ void GameEngine::refresh_all_pos(bool up, bool down, bool left, bool right) {
 void GameEngine::collision_detection(GameField& game_field) {
     if(!enemy_list.isEmpty()) {
         for (QList<Enemy*>::iterator enemy = enemy_list.begin(); enemy != enemy_list.end(); /*in body*/) {
+            bool enemy_removed = false;
             // enemy vs player
             if (collide((*enemy), player)) {
                 static int delay = 0;
@@ -149,9 +150,10 @@ void GameEngine::collision_detection(GameField& game_field) {
                         if((*enemy)->take_damage()) {
                             total_score += (*enemy)->get_enemy_score();
                             update_score_bar = true;
+                            enemy_removed = true;
 
                             game_field.removeItem((*enemy)->get_view());
-                            // TODO :: delete enemy view would get into infinite loop for no reason!?
+                            delete (*enemy)->get_view();
                             enemy = enemy_list.erase(enemy);
                             break;
                         }
@@ -160,7 +162,7 @@ void GameEngine::collision_detection(GameField& game_field) {
                     }
                 }
             }
-            if (!update_score_bar) ++enemy;
+            if (!enemy_removed) ++enemy;
         }
     }
 
