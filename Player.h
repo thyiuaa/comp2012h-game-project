@@ -4,25 +4,14 @@
 #include "Unit.h"
 #include "Bullet.h"
 
+// user controlled character
 class Player : public Unit {
-    
     public:
-        enum State {ATTACK, DEFENSE};
-        // constructor
-        Player(int hp, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height, float defense);
+        Player(int hp, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height);
+        ~Player() = default;
 
-        // accessor
-        float get_defense() const;
-        State get_state() const;
-
-        bool update_pos(bool up, bool down, bool left, bool right);
-
-        virtual Bullet* shoot() override;
-
-    private:
-        float defense;
-        State state {State::ATTACK};
-        virtual ~Player() {};
+        bool update_pos(bool up, bool down, bool left, bool right); // parameters are user's keypress
+        virtual Bullet* shoot() override; // nullptr if player is in cooldown
 };
 
 #endif

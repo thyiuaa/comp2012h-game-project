@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QKeyEvent>
 
 #include "mainwindow.h"
@@ -12,15 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->graphicsView->setScene(&game_field);
     ui->graphicsView->show();
-
     ui->scoreBar->setVisible(false);
-
     game_field.addPixmap(QPixmap("://images/bg.jpg"))->setZValue(-1);
 
-
-    screen_refersher = new QTimer(this);
-    screen_refersher->setInterval(screen_refresh_interval);
-    connect(screen_refersher, &QTimer::timeout, this, &MainWindow::refresh_screen);
+    screen_refresher = new QTimer(this);
+    screen_refresher->setInterval(SCREEN_REFRESH_INTERVAL);
+    connect(screen_refresher, &QTimer::timeout, this, &MainWindow::refresh_screen);
 }
 
 MainWindow::~MainWindow() {
@@ -33,12 +29,12 @@ void MainWindow::on_startButton_clicked() {
     ui->leaveButton->setVisible(false);
     ui->scoreBar->setVisible(true);
 
-    // create player and enemys
+    // create player
     game_engine.spawn_player(game_field);
     game_engine.show_hp_bar(game_field);
 
     // start the screen refresher
-    screen_refersher->start(10);
+    screen_refresher->start(10);
 }
 
 void MainWindow::on_leaveButton_clicked() {
@@ -47,25 +43,26 @@ void MainWindow::on_leaveButton_clicked() {
 
 void MainWindow::refresh_screen() {
     if (!game_engine.game_over()) {
-        static int timer = 0;
-        timer += 1;
-        if (timer % 250 == 1){          //every 2.5 second
-        game_engine.spawn_enemy(game_field);
+        if (++enemy_spawn_timer%ENEMY_SPAWN_INTERVAL == 1){          //every 2.5 second
+            game_engine.spawn_enemy(game_field);
         }
         game_engine.refresh_all_units_cooldown();
         game_engine.refresh_all_pos(up_pressed, down_pressed, left_pressed, right_pressed);
         game_engine.collision_detection(game_field);
+        game_engine.refresh_units_bullet_view(game_field);
         game_engine.refresh_hp(game_field);
         game_engine.refresh_score(ui->scoreBar);
-        game_engine.refresh_units_bullet_view(game_field);
         if (space_pressed) game_engine.player_shoot(game_field);
         game_engine.enemy_shoot(game_field);
     } else {
-        if(game_engine.game_over_refresh(game_field)){
+        screen_refresher->stop();
+        if(game_engine.show_game_over_screen(game_field)){
             ui->leaveButton->setText("haha! You Win!\nLeave Game");
-        } else ui->leaveButton->setText("You Lose >_<\nLeave Game");
+        } else {
+            ui->leaveButton->setText("You Lose >_<\nLeave Game");
+        }
         ui->leaveButton->setVisible(true);
-        screen_refersher->stop();
+        delete screen_refresher;
     }
 }
 

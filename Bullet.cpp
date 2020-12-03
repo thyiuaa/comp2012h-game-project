@@ -1,7 +1,5 @@
 #include "Bullet.h"
 
-#include <QDebug>
-
 Bullet::Bullet(int width, int height, int pos_x, int pos_y, int velocity): width(width), height(height), pos_x(pos_x), pos_y(pos_y), velocity(velocity) {}
 
 int Bullet::get_width() const {

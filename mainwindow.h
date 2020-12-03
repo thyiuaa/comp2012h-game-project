@@ -22,21 +22,22 @@ public:
 
 private slots:
     void on_startButton_clicked();
-
     void on_leaveButton_clicked();
 
 private:
-    friend class GameField;
     Ui::MainWindow *ui;
 
-    GameEngine game_engine;
-    GameField game_field;
-    QTimer* screen_refersher;
-    const int screen_refresh_interval{10}; // millisecond
-    void refresh_screen();
+    GameEngine game_engine; // interact with game element through the engine
+    GameField game_field; // the display area of the game
 
-    bool up_pressed{false}, down_pressed{false}, left_pressed{false}, right_pressed{false}, space_pressed{false};
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    const int SCREEN_REFRESH_INTERVAL {10}; // millisecond
+    QTimer* screen_refresher; // this will refresh the screen for every SCREEN_REFRESH_INTERVAL millisecond
+    void refresh_screen(); // action performed by the refresher
+    int enemy_spawn_timer {0}; // number of frames passed since the game start
+    const int ENEMY_SPAWN_INTERVAL {150}; // number of frames between each enemy spawn
+
+    bool up_pressed {false}, down_pressed {false}, left_pressed {false}, right_pressed {false}, space_pressed {false}; // indicate keypresses
+    void keyPressEvent(QKeyEvent *event); // set the above corresponding keypress to true
+    void keyReleaseEvent(QKeyEvent *event); // set the above corresponding keypress to false
 };
 #endif // MAINWINDOW_H

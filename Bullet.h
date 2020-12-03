@@ -16,6 +16,8 @@ class Bullet {
 
     public:
         Bullet(int width, int height, int pos_x, int pos_y, int velocity);
+        ~Bullet() = default;
+
         int get_width() const;
         int get_height() const;
         int get_velocity() const;
@@ -25,7 +27,7 @@ class Bullet {
         QString get_frienly_fire_icon_path() const;
         QString get_enemy_fire_icon_path() const;
 
-        void move_up();
+        void move_up(); // bullet only move up or down (enemy bullet has -ve velocity to move down)
         void register_view(QGraphicsPixmapItem* _view);
 };
 
