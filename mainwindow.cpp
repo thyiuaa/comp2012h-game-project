@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->scoreBar->setVisible(false);
 
+    game_field.addPixmap(QPixmap("://images/bg.jpg"))->setZValue(-1);
+
+
     screen_refersher = new QTimer(this);
     screen_refersher->setInterval(screen_refresh_interval);
     connect(screen_refersher, &QTimer::timeout, this, &MainWindow::refresh_screen);

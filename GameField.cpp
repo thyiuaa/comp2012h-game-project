@@ -43,7 +43,7 @@ void GameField::initial_render_player_hp(int MAX_HP) {
     for (int i = 0; i < MAX_HP ; i++) {
         hp_icon_image = QPixmap(hp_icon_path.arg(i%2));
         view = addPixmap(hp_icon_image);
-        view->setOffset(i*20+10, 100);
+        view->setOffset(i*16+10, 50);
         view->setZValue(20);
         hp_bar << view;
     }
