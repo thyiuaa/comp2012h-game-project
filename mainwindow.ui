@@ -56,11 +56,21 @@
    <widget class="QPushButton" name="startButton">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>250</y>
-      <width>271</width>
-      <height>241</height>
+      <x>210</x>
+      <y>300</y>
+      <width>280</width>
+      <height>120</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Cascadia Mono SemiBold</family>
+      <pointsize>24</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>false</underline>
+      <kerning>true</kerning>
+     </font>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
@@ -75,11 +85,19 @@
    <widget class="QPushButton" name="leaveButton">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>580</y>
-      <width>241</width>
-      <height>151</height>
+      <x>210</x>
+      <y>460</y>
+      <width>280</width>
+      <height>120</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Cascadia Mono SemiBold</family>
+      <pointsize>24</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>

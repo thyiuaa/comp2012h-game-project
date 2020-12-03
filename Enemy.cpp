@@ -22,11 +22,9 @@ int Enemy::get_enemy_score(){
 
 //idk what these are called
 void Enemy::update_pos(){
-    if (pos_y != 740){
-        move_down();
-        move_left();
-        if (pos_x <= 0 || pos_x >= 570) velocity_x *= -1;
-    }
+    move_down();
+    move_left();
+    if (pos_x <= 0 || pos_x >= 570) velocity_x *= -1;
 }
 Bullet* Enemy::shoot(){
 

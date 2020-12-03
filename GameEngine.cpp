@@ -51,7 +51,7 @@ void GameEngine::spawn_enemy(GameField& game_field){
     Enemy* enemy = new Enemy(hp, velocity_x, velocity_y, pos_x, pos_y, shooting_interval, MAX_HP, width, height, chance, score);
     game_field.initial_render_unit(enemy);
     enemy_list.append(enemy);
-    qDebug() << enemy_list;
+    qDebug() << "Enemies:" << enemy_list;
 }
 
 
@@ -82,17 +82,13 @@ void GameEngine::enemy_shoot(GameField& game_field){
 }
 
 void GameEngine::refresh_units_bullet_view(GameField& game_field) {
-    if(!enemy_list.isEmpty()) {
-        for (QList<Enemy*>::iterator i = enemy_list.begin(); i != enemy_list.end(); ++i) {
-            game_field.render_unit_update(*i);
-        }
-    }
+    game_field.render_removeable_item_pos_update(enemy_list);
     if (update_player_view) {
-        game_field.render_unit_update(player);
+        game_field.render_player_pos_update(player);
         update_player_view = false;
     }
-    game_field.render_bullet_update(friendly_bullet_list);
-    game_field.render_bullet_update(enemy_bullet_list);
+    game_field.render_removeable_item_pos_update(friendly_bullet_list);
+    game_field.render_removeable_item_pos_update(enemy_bullet_list);
 }
 
 void GameEngine::refresh_all_units_cooldown() {
@@ -128,50 +124,60 @@ void GameEngine::refresh_all_pos(bool up, bool down, bool left, bool right) {
 
 void GameEngine::collision_detection(GameField& game_field) {
     if(!enemy_list.isEmpty()) {
-        for (QList<Enemy*>::iterator enemy = enemy_list.begin(); enemy != enemy_list.end(); ++enemy) {
-            // friendly_bullet vs enemy
-            if (!friendly_bullet_list.isEmpty()) {
-                for (QList<Bullet*>::iterator bullet = friendly_bullet_list.begin(); bullet != friendly_bullet_list.end(); ++bullet) {
-                    if (collide((*enemy), (*bullet))) {
-                        delete (*bullet)->get_view();
-                        friendly_bullet_list.removeOne(*bullet);
-                        if((*enemy)->take_damage()){
-                            game_field.remove_dead_unit_view((*enemy)->get_view());
-                            enemy_list.removeOne(*enemy);
-                            total_score += (*enemy)->get_enemy_score();
-                            update_score_bar = true;
-                            break; // no need further checking if the enemy is dead
-                        }
-                    }
-                }
-            }
-
+        for (QList<Enemy*>::iterator enemy = enemy_list.begin(); enemy != enemy_list.end(); /*in body*/) {
             // enemy vs player
             if (collide((*enemy), player)) {
                 static int delay = 0;
                 delay += 1;
-                if (delay%20 == 1){         // 1 hp deducted for each 0.2s // TODO :: rate too high?
+                if (delay%20 == 1){         // 1 hp deducted for each 0.2s
                     update_hp_bar = true;
-                    // TODO :: enemy also takes damage?
                     if(player->take_damage()) {
-                        game_field.remove_dead_unit_view(player->get_view());
+                        game_field.removeItem(player->get_view());
+                        return;
                     }
                 }
             }
+
+            // friendly_bullet vs enemy
+            if (!friendly_bullet_list.isEmpty()) {
+                for (QList<Bullet*>::iterator bullet = friendly_bullet_list.begin(); bullet != friendly_bullet_list.end(); /*in body*/) {
+                    if (collide((*enemy), (*bullet))) {
+                        game_field.removeItem((*bullet)->get_view());
+                        delete (*bullet)->get_view();
+                        bullet = friendly_bullet_list.erase(bullet);
+
+                        if((*enemy)->take_damage()) {
+                            total_score += (*enemy)->get_enemy_score();
+                            update_score_bar = true;
+
+                            game_field.removeItem((*enemy)->get_view());
+                            // TODO :: delete enemy view would get into infinite loop for no reason!?
+                            enemy = enemy_list.erase(enemy);
+                            break;
+                        }
+                    } else {
+                        ++bullet;
+                    }
+                }
+            }
+            if (!update_score_bar) ++enemy;
         }
     }
 
     // enemy_bullet vs player
-    if (!enemy_bullet_list.isEmpty()) {
-        for (QList<Bullet*>::iterator bullet = enemy_bullet_list.begin(); bullet != enemy_bullet_list.end(); ++bullet) {
+    if (!enemy_bullet_list.isEmpty() && player != nullptr) {
+        for (QList<Bullet*>::iterator bullet = enemy_bullet_list.begin(); bullet != enemy_bullet_list.end(); /*in body*/) {
             if (collide(player, (*bullet))) {
                 delete (*bullet)->get_view();
-                enemy_bullet_list.removeOne(*bullet);
+                bullet = enemy_bullet_list.erase(bullet);
+
                 update_hp_bar = true;
                 if(player->take_damage()) {
-                    game_field.remove_dead_unit_view(player->get_view());
-                    break; // no need further checking if the player is dead
+                    game_field.removeItem(player->get_view());
+                    return;
                 }
+            } else {
+                ++bullet;
             }
         }
     }

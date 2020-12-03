@@ -56,10 +56,10 @@ void MainWindow::refresh_screen() {
         game_engine.refresh_score(ui->scoreBar);
         game_engine.refresh_units_bullet_view(game_field);
         if (space_pressed) game_engine.player_shoot(game_field);
+        game_engine.enemy_shoot(game_field);
     } else {
         //screen_refersher->stop();
     }
-        game_engine.enemy_shoot(game_field);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {

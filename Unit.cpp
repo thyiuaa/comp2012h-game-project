@@ -50,22 +50,22 @@ QGraphicsPixmapItem* Unit::get_view() const {
 // in bound validation should be done by game engine
 // top left corner is (0,0)
 void Unit::move_up() {
-    if (pos_y-velocity_y < 0) return;
+    if (pos_y-velocity_y < -height) return;
     pos_y -= velocity_y;
 }
 
 void Unit::move_down() {
-    if (pos_y+velocity_y > 840-height) return;
+    if (pos_y+velocity_y > 840+height) return;
     pos_y += velocity_y;
 }
 
 void Unit::move_right() {
-    if (pos_x+velocity_x > 670-width) return;
+    if (pos_x+velocity_x > 670+width) return;
     pos_x += velocity_x;
 }
 
 void Unit::move_left() {
-    if (pos_x-velocity_x < 0) return;
+    if (pos_x-velocity_x < -width) return;
     pos_x -= velocity_x;
 }
 

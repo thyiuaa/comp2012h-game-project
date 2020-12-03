@@ -16,12 +16,8 @@ void GameField::initial_render_unit(Unit* unit) {
     unit->register_view(_view);
 }
 
-void GameField::render_unit_update(Unit* unit) {
-    unit->get_view()->setOffset(unit->get_pos_x(), unit->get_pos_y());
-}
-
-void GameField::remove_dead_unit_view(QGraphicsPixmapItem* view) {
-    removeItem(view);
+void GameField::render_player_pos_update(Player* player) {
+    player->get_view()->setOffset(player->get_pos_x(), player->get_pos_y());
 }
 
 void GameField::initial_render_bullet(Bullet* bullet, bool is_friendly) {
@@ -36,20 +32,6 @@ void GameField::initial_render_bullet(Bullet* bullet, bool is_friendly) {
     _view->setZValue(12);
 
     bullet->register_view(_view);
-}
-
-void GameField::render_bullet_update(QList<Bullet*>& bullet_list) {
-    if (!bullet_list.isEmpty()) {
-        for (QList<Bullet*>::iterator bullet = bullet_list.begin(); bullet != bullet_list.end(); ++bullet) {
-            if ((*bullet)->get_pos_y() == -(*bullet)->get_height()) {
-                removeItem((*bullet)->get_view());
-                delete (*bullet)->get_view();
-                bullet_list.removeOne((*bullet));
-            } else {
-                (*bullet)->get_view()->setOffset((*bullet)->get_pos_x(), (*bullet)->get_pos_y());
-            }
-        }
-    }
 }
 
 void GameField::initial_render_player_hp(int MAX_HP) {
