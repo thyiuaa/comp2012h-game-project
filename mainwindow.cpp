@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QKeyEvent>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -43,6 +44,11 @@ void MainWindow::on_leaveButton_clicked() {
 
 void MainWindow::refresh_screen() {
     if (!game_engine.game_over()) {
+        static int timer = 0;
+        timer += 1;
+        if (timer % 250 == 1){          //every 2.5 second
+        game_engine.spawn_enemy(game_field);
+        }
         game_engine.refresh_all_units_cooldown();
         game_engine.refresh_all_pos(up_pressed, down_pressed, left_pressed, right_pressed);
         game_engine.collision_detection(game_field);
@@ -51,8 +57,9 @@ void MainWindow::refresh_screen() {
         game_engine.refresh_units_bullet_view(game_field);
         if (space_pressed) game_engine.player_shoot(game_field);
     } else {
-        screen_refersher->stop();
+        //screen_refersher->stop();
     }
+        game_engine.enemy_shoot(game_field);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {

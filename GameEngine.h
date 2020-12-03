@@ -31,9 +31,10 @@ class GameEngine {
 
         void show_hp_bar(GameField& game_field) const;
 
-        void spawn_enemy();
+        void spawn_enemy(GameField& game_field);
         void spawn_player(GameField& game_field);
         void player_shoot(GameField& game_field);
+        void enemy_shoot(GameField& game_field);
         void collision_detection(GameField& game_field);
         bool game_over();
 
@@ -52,7 +53,7 @@ class GameEngine {
                 if (obj1->get_pos_y() < obj2->get_pos_y()) {
                     if (obj1->get_pos_y()+obj1->get_height() >= obj2->get_pos_y()) { // any part of obj1 is at the vertical level of obj2
                         if (((obj2->get_pos_x()<obj1->get_pos_x()+obj1->get_width()) && (obj2->get_pos_x()>obj1->get_pos_x()))
-                            || ((obj2->get_pos_x()+obj2->get_width()<obj1->get_pos_x()+obj1->get_width()) && (+obj2->get_width()>obj1->get_pos_x()))) { // left or right end of obj2 is in obj1
+                            || ((obj2->get_pos_x()+obj2->get_width()<obj1->get_pos_x()+obj1->get_width()) && (obj2->get_pos_x()+obj2->get_width()>obj1->get_pos_x()))) { // left or right end of obj2 is in obj1
                             return true;
                         } else {
                             return false;
@@ -61,7 +62,7 @@ class GameEngine {
                 } else {
                     if (obj2->get_pos_y()+obj2->get_height() >= obj1->get_pos_y()) {
                         if (((obj1->get_pos_x()<obj2->get_pos_x()+obj2->get_width()) && (obj1->get_pos_x()>obj2->get_pos_x()))
-                            || ((obj1->get_pos_x()+obj1->get_width()<obj2->get_pos_x()+obj2->get_width()) && (+obj1->get_width()>obj2->get_pos_x()))) {
+                            || ((obj1->get_pos_x()+obj1->get_width()<obj2->get_pos_x()+obj2->get_width()) && (obj1->get_pos_x()+obj1->get_width()>obj2->get_pos_x()))) {
                             return true;
                         } else {
                             return false;

@@ -9,15 +9,17 @@ class Enemy: public Unit {
         float shooting_chance;
         int enemy_score;
     public:
-        //constructor
+        //constructor and destructor
         Enemy(int hp, int velocity_x, int velocity_y, int pos_x, int pos_y, int shooting_interval, int MAX_HP, int width, int height, float shooting_chance, int enemy_score);
+        ~Enemy();
 
         //accessor
         float get_shooting_chance();
         int get_enemy_score();
 
         //idk what these are called
-        virtual Bullet* shoot();
+        void update_pos();
+        virtual Bullet* shoot() override;
 };
 
 #endif

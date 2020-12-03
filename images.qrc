@@ -5,5 +5,6 @@
         <file>images/player_icon_test.png</file>
         <file>images/heart0.png</file>
         <file>images/heart1.png</file>
+        <file>images/enemy_icon_temp.png</file>
     </qresource>
 </RCC>

@@ -32,7 +32,7 @@ Bullet* Player::shoot() {
     int bullet_height = QPixmap("://images/friendly_fire.png").height();
     int bullet_pos_x = pos_x+width/2-bullet_width/2;
     int bullet_pos_y = pos_y-0.75*bullet_height;
-    int bullet_velocity = 1;
+    int bullet_velocity = 2;
 
     if (shooting_cooldown == 0) {
         Bullet* bullet = new Bullet(bullet_width, bullet_height, bullet_pos_x, bullet_pos_y, bullet_velocity);

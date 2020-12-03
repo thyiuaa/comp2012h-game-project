@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <cstdlib>
 
 #include "GameEngine.h"
 
@@ -27,6 +28,33 @@ void GameEngine::spawn_player(GameField& game_field) {
     game_field.initial_render_unit(player);
 }
 
+//make use of rand() in cstdlib
+void GameEngine::spawn_enemy(GameField& game_field){
+    int hp = 2 + rand()%4;
+    int velocity_x = rand()%3 - 1;
+    int velocity_y = 1 + rand()%2; //speed but not velocity
+    int shooting_interval = 10 * (1 + rand()%3);
+    int MAX_HP = hp;
+    int score;
+    switch(MAX_HP){
+    case 2: score = 1; break;
+    case 3: score = 2; break;
+    case 4: score = 3; break;
+    case 5: score = 3 + rand()%3; break;
+    }
+    score *= velocity_y;
+    float chance = 0.5;
+    int width = QPixmap("://images/enemy_icon_temp.png").width();
+    int height = QPixmap("://images/enemy_icon_temp.png").height();
+    int pos_x = rand()%570;
+    int pos_y = 0;
+    Enemy* enemy = new Enemy(hp, velocity_x, velocity_y, pos_x, pos_y, shooting_interval, MAX_HP, width, height, chance, score);
+    game_field.initial_render_unit(enemy);
+    enemy_list.append(enemy);
+    qDebug() << enemy_list;
+}
+
+
 bool GameEngine::game_over() {
     if (total_score > 100 || player->get_hp() == 0) return true;
 
@@ -41,10 +69,22 @@ void GameEngine::player_shoot(GameField &game_field) {
     }
 }
 
+void GameEngine::enemy_shoot(GameField& game_field){
+    if(!enemy_list.isEmpty()) {
+        for (QList<Enemy*>::iterator i = enemy_list.begin(); i != enemy_list.end(); ++i) {
+            Bullet* bullet = (*i)->shoot();
+            if(bullet != nullptr){
+                enemy_bullet_list.append(bullet);
+                game_field.initial_render_bullet(bullet, false);
+            }
+        }
+    }
+}
+
 void GameEngine::refresh_units_bullet_view(GameField& game_field) {
     if(!enemy_list.isEmpty()) {
         for (QList<Enemy*>::iterator i = enemy_list.begin(); i != enemy_list.end(); ++i) {
-            int dummy = 0;
+            game_field.render_unit_update(*i);
         }
     }
     if (update_player_view) {
@@ -58,7 +98,7 @@ void GameEngine::refresh_units_bullet_view(GameField& game_field) {
 void GameEngine::refresh_all_units_cooldown() {
     if(!enemy_list.isEmpty()) {
         for (QList<Enemy*>::iterator i = enemy_list.begin(); i != enemy_list.end(); ++i) {
-            int dummy = 0;
+            (*i)->update_cooldown();
         }
     }
     player->update_cooldown();
@@ -68,7 +108,7 @@ void GameEngine::refresh_all_pos(bool up, bool down, bool left, bool right) {
     // units
     if(!enemy_list.isEmpty()) {
         for (QList<Enemy*>::iterator i = enemy_list.begin(); i != enemy_list.end(); ++i) {
-            int dummy = 0;
+            (*i)->update_pos();
         }
     }
     update_player_view = player->update_pos(up, down, left, right);
@@ -93,14 +133,30 @@ void GameEngine::collision_detection(GameField& game_field) {
             if (!friendly_bullet_list.isEmpty()) {
                 for (QList<Bullet*>::iterator bullet = friendly_bullet_list.begin(); bullet != friendly_bullet_list.end(); ++bullet) {
                     if (collide((*enemy), (*bullet))) {
-                        int dummy = 0;
+                        delete (*bullet)->get_view();
+                        friendly_bullet_list.removeOne(*bullet);
+                        if((*enemy)->take_damage()){
+                            game_field.remove_dead_unit_view((*enemy)->get_view());
+                            enemy_list.removeOne(*enemy);
+                            total_score += (*enemy)->get_enemy_score();
+                            update_score_bar = true;
+                            break; // no need further checking if the enemy is dead
+                        }
                     }
                 }
             }
 
             // enemy vs player
             if (collide((*enemy), player)) {
-                int dummy = 0;
+                static int delay = 0;
+                delay += 1;
+                if (delay%20 == 1){         // 1 hp deducted for each 0.2s // TODO :: rate too high?
+                    update_hp_bar = true;
+                    // TODO :: enemy also takes damage?
+                    if(player->take_damage()) {
+                        game_field.remove_dead_unit_view(player->get_view());
+                    }
+                }
             }
         }
     }
@@ -109,14 +165,18 @@ void GameEngine::collision_detection(GameField& game_field) {
     if (!enemy_bullet_list.isEmpty()) {
         for (QList<Bullet*>::iterator bullet = enemy_bullet_list.begin(); bullet != enemy_bullet_list.end(); ++bullet) {
             if (collide(player, (*bullet))) {
+                delete (*bullet)->get_view();
+                enemy_bullet_list.removeOne(*bullet);
                 update_hp_bar = true;
                 if(player->take_damage()) {
                     game_field.remove_dead_unit_view(player->get_view());
+                    break; // no need further checking if the player is dead
                 }
             }
         }
     }
 }
+
 
 void GameEngine::refresh_hp(GameField& game_field) {
     if (update_hp_bar) {
