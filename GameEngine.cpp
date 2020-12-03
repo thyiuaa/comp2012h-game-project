@@ -51,7 +51,6 @@ void GameEngine::spawn_enemy(GameField& game_field){
     Enemy* enemy = new Enemy(hp, velocity_x, velocity_y, pos_x, pos_y, shooting_interval, MAX_HP, width, height, chance, score);
     game_field.initial_render_unit(enemy);
     enemy_list.append(enemy);
-    qDebug() << "Enemies:" << enemy_list;
 }
 
 
@@ -59,6 +58,28 @@ bool GameEngine::game_over() {
     if (total_score > 100 || player->get_hp() == 0) return true;
 
     return false;
+}
+
+bool GameEngine::game_over_refresh(GameField& game_field){
+
+        for (QList<Enemy*>::iterator enemy = enemy_list.begin(); enemy != enemy_list.end();) {
+            game_field.removeItem((*enemy)->get_view());
+            delete (*enemy)->get_view();
+            enemy = enemy_list.erase(enemy);
+        }
+        for (QList<Bullet*>::iterator bullet = friendly_bullet_list.begin(); bullet != friendly_bullet_list.end();) {
+            game_field.removeItem((*bullet)->get_view());
+            delete (*bullet)->get_view();
+            bullet = friendly_bullet_list.erase(bullet);
+        }
+        for (QList<Bullet*>::iterator bullet = enemy_bullet_list.begin(); bullet != enemy_bullet_list.end();) {
+            game_field.removeItem((*bullet)->get_view());
+            delete (*bullet)->get_view();
+            bullet = enemy_bullet_list.erase(bullet);
+        }
+
+        if(total_score >= 100) return true;
+        else return false;
 }
 
 void GameEngine::player_shoot(GameField &game_field) {

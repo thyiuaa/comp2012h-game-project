@@ -61,7 +61,11 @@ void MainWindow::refresh_screen() {
         if (space_pressed) game_engine.player_shoot(game_field);
         game_engine.enemy_shoot(game_field);
     } else {
-        //screen_refersher->stop();
+        if(game_engine.game_over_refresh(game_field)){
+            ui->leaveButton->setText("haha! You Win!\nLeave Game");
+        } else ui->leaveButton->setText("You Lose >_<\nLeave Game");
+        ui->leaveButton->setVisible(true);
+        screen_refersher->stop();
     }
 }
 

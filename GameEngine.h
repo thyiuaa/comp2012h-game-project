@@ -37,6 +37,7 @@ class GameEngine {
         void enemy_shoot(GameField& game_field);
         void collision_detection(GameField& game_field);
         bool game_over();
+        bool game_over_refresh(GameField& game_field);
 
         void refresh_all_pos(bool up, bool down, bool left, bool right);
         void refresh_units_bullet_view(GameField& game_field);
