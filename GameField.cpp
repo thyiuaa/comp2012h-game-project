@@ -44,6 +44,7 @@ void GameField::initial_render_bullet(Bullet* bullet, bool from_player) {
 }
 
 void GameField::render_player_pos_update(Player* player) {
+    if(player == nullptr || player->get_view() == nullptr) return;
     player->get_view()->setOffset(player->get_pos_x(), player->get_pos_y());
 }
 

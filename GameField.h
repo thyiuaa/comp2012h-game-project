@@ -29,13 +29,15 @@ class GameField : public QGraphicsScene {
         void render_enemy_bullet_pos_update(T& item_list) { // remove out of bound bullet and enemy
             if (!item_list.isEmpty()) {
                 for (typename T::iterator item = item_list.begin(); item != item_list.end(); /*inbody*/) {
-                    if ((*item)->get_pos_y() == -(*item)->get_height()-10 || (*item)->get_pos_y() > 839) {
-                        removeItem((*item)->get_view());
-                        delete (*item)->get_view();
-                        item = item_list.erase(item);
-                    } else {
-                        (*item)->get_view()->setOffset((*item)->get_pos_x(), (*item)->get_pos_y());
-                        ++item;
+                    if ((*item)->get_view() != nullptr) {
+                        if ((*item)->get_pos_y() == -(*item)->get_height()-10 || (*item)->get_pos_y() > 900) {
+                            removeItem((*item)->get_view());
+                            delete (*item)->get_view();
+                            item = item_list.erase(item);
+                        } else {
+                            (*item)->get_view()->setOffset((*item)->get_pos_x(), (*item)->get_pos_y());
+                            ++item;
+                        }
                     }
                 }
             }

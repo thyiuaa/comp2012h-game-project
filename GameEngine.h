@@ -19,7 +19,11 @@ class GameEngine {
         QList<Enemy*> enemy_list;
         QList<Bullet*> friendly_bullet_list;
         QList<Bullet*> enemy_bullet_list;
-        int unit_collide_delay {0};
+
+        int enemy_spawn_timer {0}; // number of frames passed since the game start
+        const int ENEMY_SPAWN_INTERVAL {150}; // number of frames between each enemy spawn
+        int unit_collide_delay {0}; // number of frames that player collided with enemy
+        const int UNIT_COLLIDE_DAMAGE_INTERVAL {60}; // number of frame between every time player takes collision damage with enemy
 
         bool update_player_view {false};
         bool update_score_bar {false};
@@ -29,6 +33,7 @@ class GameEngine {
         GameEngine() = default;
         ~GameEngine();
 
+        void reset_total_score(QLabel* score_bar);
         void show_hp_bar(GameField& game_field) const;
         void spawn_enemy(GameField& game_field);
         void spawn_player(GameField& game_field);

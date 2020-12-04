@@ -14,7 +14,7 @@
    <enum>Qt::TabFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>COMP2012H (Group H19) - Shooting Game</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGraphicsView" name="graphicsView">
@@ -54,6 +54,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="startButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>210</x>

@@ -15,6 +15,7 @@ SOURCES += \
     GameField.cpp \
     Player.cpp \
     Unit.cpp \
+    exitconfirm.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -25,9 +26,11 @@ HEADERS += \
     GameField.h \
     Player.h \
     Unit.h \
+    exitconfirm.h \
     mainwindow.h
 
 FORMS += \
+    exitconfirm.ui \
     mainwindow.ui
 
 # Default rules for deployment.
