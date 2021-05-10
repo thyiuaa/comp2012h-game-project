@@ -1,5 +1,5 @@
 # COMP2012H - Shooting Game
-
+*** Moved from https://bitbucket.org/thyiuaa/project to https://github.com/thyiuaa/comp2012h-game-project
 ## Descrption
 This is a 2D vertical shooting game. C++ assignments will appear on the top of the screen and gradually move to the bottom. Control Desmond to shoot them down and get points. Get enough points to win the game!<br/>
 
@@ -10,7 +10,7 @@ Down - move down<br/>
 Left - move left<br/>
 Right - move right<br/>
 
-## Runnable Environment
+## Environment
 Qt Creator 4.13.2/ Qt 5.15.1<br/>
 
 ## Steps
